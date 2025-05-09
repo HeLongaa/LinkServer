@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>友链管理</title>
+    <link rel="stylesheet" href="friends.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>友链管理系统</h1>
+            <div class="user-info">
+                <span id="userEmail"></span>
+                <button id="logoutBtn" class="logout-btn">退出登录</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- 搜索和添加按钮 -->
+            <div class="actions">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜索友链...">
+                    <button id="searchBtn"><i class="fas fa-search"></i></button>
+                </div>
+                <button id="addFriendBtn" class="add-btn">
+                    <i class="fas fa-plus"></i> 添加友链
+                </button>
+            </div>
+
+            <!-- 友链列表 -->
+            <div class="friends-list">
+                <div id="friendsList" class="friends-grid"></div>
+                
+                <!-- 分页控件 -->
+                <div class="pagination">
+                    <button id="prevPage" class="page-btn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="pageInfo">第 1 页</span>
+                    <button id="nextPage" class="page-btn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加/编辑友链的模态框 -->
+        <div id="friendModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">添加友链</h2>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="friendForm">
+                    <input type="hidden" id="friendId">
+                    <div class="form-group">
+                        <label for="name">网站名称</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="link">网站链接</label>
+                        <input type="url" id="link" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">头像链接</label>
+                        <input type="url" id="avatar" required>
+                        <div class="avatar-preview" id="avatarPreview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descr">网站描述</label>
+                        <textarea id="descr"></textarea>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="submit-btn">保存</button>
+                        <button type="button" class="cancel-btn">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 加载动画 -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner"></div>
+        </div>
+
+        <!-- 提示框 -->
+        <div id="toast" class="toast"></div>
+    </div>
+    <script src="friends.js"></script>
+</body>
+</html> 
