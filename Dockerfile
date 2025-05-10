@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM hub.040720.xyz/library/node:22-alpine
 # node的app.js文件
 WORKDIR /app
 # 复制npm的依赖文件
