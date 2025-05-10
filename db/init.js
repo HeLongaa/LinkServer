@@ -1,34 +1,44 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const { Pool } = require('pg');
+require('dotenv').config();
 
-// 创建数据库连接
-const db = new sqlite3.Database(path.join(__dirname, 'friends.db'), (err) => {
-    if (err) {
-        console.error('Error connecting to database:', err);
-    } else {
-        console.log('Connected to SQLite database');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL
+});
+
+// 初始化表
+async function initDB() {
+    try {
+        const client = await pool.connect();
+
+        // 创建友链表
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS friends (
+                id SERIAL PRIMARY KEY,
+                name TEXT NOT NULL,
+                link TEXT NOT NULL,
+                avatar TEXT NOT NULL,
+                descr TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // 创建用户表
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                email TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        console.log('Tables created successfully');
+        client.release();
+    } catch (err) {
+        console.error('Error initializing database:', err);
     }
-});
+}
 
-// 创建表
-db.serialize(() => {
-    // 创建友链表
-    db.run(`CREATE TABLE IF NOT EXISTS friends (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        link TEXT NOT NULL,
-        avatar TEXT NOT NULL,
-        descr TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
+initDB();
 
-    // 创建用户表
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
-});
-
-module.exports = db; 
+module.exports = pool;
