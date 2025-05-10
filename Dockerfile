@@ -1,6 +1,6 @@
 FROM node:22
 # node的app.js文件
-WORKDIR ./
+WORKDIR /app
 # 复制npm的依赖文件
 COPY package*.json ./
 # 项目安装依赖
